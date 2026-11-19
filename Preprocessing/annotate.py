@@ -15,10 +15,24 @@ import matplotlib.pyplot as plt
 # 1. SETTINGS
 # =====================================================
 
-image_path = "/Users/lukasweber/Desktop/Artrithis_ML/source/images/test/test/Normal/9000622L.png"
+# Images for annotation Normal, Left (random selection)
+#image_path = "/Users/lukasweber/Desktop/Artrithis_ML/source/images/train/train/Normal/9099961L.png"
+
+# Images for annotation Normal, Right (random selection)
+#image_path = "/Users/lukasweber/Desktop/Artrithis_ML/source/images/train/train/Normal/9115742R.png"
+#image_path = "/Users/lukasweber/Desktop/Artrithis_ML/source/images/train/train/Normal/9244001R.png"
+#image_path = "/Users/lukasweber/Desktop/Artrithis_ML/source/images/train/train/Normal/9422008R.png"
+#image_path = "/Users/lukasweber/Desktop/Artrithis_ML/source/images/train/train/Normal/9438337R.png"
+#image_path = "/Users/lukasweber/Desktop/Artrithis_ML/source/images/train/train/Normal/9355390R.png"
+
+# Images for annotation Artrithis, Right (random selection)
+#image_path = "/Users/lukasweber/Desktop/Artrithis_ML/source/images/train/train/Normal/9115742R.png"
+
+# Images for annotation Artrithis, Left (random selection)
+#image_path = "/Users/lukasweber/Desktop/Artrithis_ML/source/images/train/train/Normal/9115742R.png"
 
 bone_name = "femur"
-n_landmarks = 20
+n_landmarks = 30
 
 # Save annotations in a folder next to this script
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -41,6 +55,26 @@ if image is None:
 print("Image loaded successfully!")
 print("Image dimensions:", image.shape)
 
+
+# Extract filename without extension
+filename = os.path.splitext(
+    os.path.basename(image_path)
+)[0]
+
+# Detect left or right knee
+if filename.endswith("L"):
+    knee_side = "left"
+    image = cv2.flip(image, 1)
+    print("Left knee detected: Image flipped horizontally.")
+
+elif filename.endswith("R"):
+    knee_side = "right"
+    print("Right knee detected: Original orientation retained.")
+
+else:
+    raise ValueError(
+        "Filename must end with L or R, e.g. 9000622L.png"
+    )
 
 # =====================================================
 # 3. APPLY CLAHE
